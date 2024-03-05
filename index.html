@@ -1,0 +1,65 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up the screen
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Snack Muncher")
+
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+
+# Player properties
+player_size = 50
+player_x = SCREEN_WIDTH // 2 - player_size // 2
+player_y = SCREEN_HEIGHT // 2 - player_size // 2
+player_speed = 5
+
+# Snack properties
+snack_size = 20
+snack_x = random.randint(0, SCREEN_WIDTH - snack_size)
+snack_y = random.randint(0, SCREEN_HEIGHT - snack_size)
+
+# Main game loop
+running = True
+while running:
+    screen.fill(WHITE)
+
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Move the player
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        player_x -= player_speed
+    if keys[pygame.K_RIGHT]:
+        player_x += player_speed
+    if keys[pygame.K_UP]:
+        player_y -= player_speed
+    if keys[pygame.K_DOWN]:
+        player_y += player_speed
+
+    # Draw player
+    pygame.draw.rect(screen, BLACK, (player_x, player_y, player_size, player_size))
+
+    # Draw snack
+    pygame.draw.rect(screen, RED, (snack_x, snack_y, snack_size, snack_size))
+
+    # Check if player eats the snack
+    if player_x < snack_x + snack_size and player_x + player_size > snack_x \
+            and player_y < snack_y + snack_size and player_y + player_size > snack_y:
+        snack_x = random.randint(0, SCREEN_WIDTH - snack_size)
+        snack_y = random.randint(0, SCREEN_HEIGHT - snack_size)
+
+    pygame.display.update()
+
+# Quit Pygame
+pygame.quit()
